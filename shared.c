@@ -48,14 +48,12 @@ int main() {
             fprintf(stderr, "shmget error");
             exit(1);
         }
-
         // detatches memory segment
         if (shmctl(shmId, IPC_RMID, 0) < 0) {
             fprintf(stderr, "Cannot deallocate memory");
             exit(1);
         }
     }
-
     return 0;
 }
 
@@ -64,7 +62,6 @@ int main() {
 * changes to shared memory
 */
 void* reader (void* input) {
-
     return NULL;
 }
 
