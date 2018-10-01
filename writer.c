@@ -40,7 +40,7 @@ int main() {
       perror ("can't attach\n");
       exit (1);
    }
-   printf ("value a: %lu\t value b: %lu\n", (unsigned long) shmPtr, (unsigned long) shmPtr + FOO);
+   printf ("value a: %lu\t value b: %lu\n", (unsigned long) shmPtr, (unsigned long) shmPtr + SHM_SIZE);
    if (shmdt (shmPtr) < 0) {
       perror ("just can't let go\n");
       exit (1);
