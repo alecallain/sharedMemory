@@ -20,8 +20,6 @@
 */
 
 /** Global variables */
-pthread_t thread[50];
-int status;
 char userInput;
 int shmId;
 char* shmPtr;
@@ -34,7 +32,7 @@ int main() {
   int shmId;
    char *shmPtr;
 
-   if ((shmId = shmget (IPC_PRIVATE, FOO, IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
+   if ((shmId = shmget (IPC_PRIVATE, SHM_SIZE, IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
       perror ("i can't get no..\n");
       exit (1);
    }
@@ -52,5 +50,5 @@ int main() {
       exit(1);
    }
 
-   return 0; 
+   return 0;
 }
