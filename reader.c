@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -6,8 +5,11 @@
 #include <sys/stat.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include <pthread.h>
 #include <string.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/resource.h>
 
 #define SHM_SIZE 1024
 
@@ -29,6 +31,7 @@ typedef struct {
   int turn;
   char message[500];
 } memToken;
+void sigintHandler (int sigNum);
 
 /**
 * Main method
@@ -38,8 +41,7 @@ int main() {
   key_t key = ftok("test.txt",65);
   printf("Key: %d\n",key);
   memToken token;
-  int shmId;
-  char *shmPtr;
+  signal(SIGINT, sigintHandler);
   char *i = "";
   token.turn = 0;
   strcpy(token.message, i);
@@ -78,6 +80,21 @@ int main() {
       perror ("can't deallocate\n");
       exit(1);
    }
-
+   kill(getppid(), SIGINT);
    return 0;
+}
+
+void sigintHandler (int sigNum){
+  printf("Detaching and deleting");
+  // detach
+  if (shmdt (shmPtr) < 0) {
+     perror ("just can't let go\n");
+     exit (1);
+  }
+  // clean
+  if (shmctl (shmId, IPC_RMID, 0) < 0) {
+     perror ("can't deallocate\n");
+     exit(1);
+  }
+  exit(0);
 }

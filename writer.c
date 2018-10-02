@@ -74,9 +74,7 @@ int main() {
         memcpy(shmPtr, &token, sizeof(memToken));
         printf("We just wrote %s to the memory segment.\n", token.message);
    }
-
-
-
+   kill(getppid(), SIGINT);
    return 0;
 }
 void sigintHandler (int sigNum){
