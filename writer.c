@@ -52,7 +52,7 @@ int main() {
   }
 
   while(strcmp(token.message, "quit") != 0){
-      printf("Give me input:\n");
+      printf("Give me input: \n");
       fgets(token.message, sizeof(token.message), stdin);
       while(token.turn == 1){
         // IT IS NOT THE WRITERS TURN
@@ -66,8 +66,7 @@ int main() {
         // critical section
         token.turn = 1;
         memcpy(shmPtr, &token, sizeof(memToken));
-        printf
-
+        printf("We just wrote %s to the memory segment.", token.message);
    }
 
    // detach
