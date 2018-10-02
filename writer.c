@@ -41,7 +41,7 @@ int main() {
   char *shmPtr;
 
   token.turn = 0;
-  if ((shmId = shmget (key, sizeof(memToken), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
+  if ((shmId = shmget (key, sizeof(SHM_SIZE), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
      perror ("i can't get no..\n");
      exit (1);
   }
