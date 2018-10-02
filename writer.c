@@ -58,7 +58,7 @@ int main() {
         // check for updates on turn so the writer can go again
         // if token.turn is updated to 0 by teh reader
         // we know that the reader read and we can write again
-        printf("Token message: %s, Token turn: %d\n", token.message, token.turn);
+        printf("Token message: '%s', Token turn: %d\n", token.message, token.turn);
         memcpy(&token, shmPtr, sizeof(memToken));
       }
         // writing this is the writers turn
@@ -71,7 +71,7 @@ int main() {
         token.turn = 1;
         // critical line
         memcpy(shmPtr, &token, sizeof(memToken));
-        printf("We just wrote %s to the memory segment.\n", token.message);
+        printf("We just wrote '%s' to the memory segment.\n", token.message);
    }
    kill(getpid(), SIGINT);
    return 0;

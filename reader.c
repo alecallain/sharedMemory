@@ -60,11 +60,12 @@ int main() {
        // it is not the readers turn to change the tun var
        // reading for updates on the turn variable
        // printf("Checking for updates.\n");
+       printf("Token message: '%s', Token turn: %d\n", token.message, token.turn);
        memcpy(&token, shmPtr, sizeof(memToken));
      }
      // This is the critical section where you read for real
      // you change the turn variable so that it is the writers turn
-     printf("Got the message: %s", token.message);
+     printf("Got the message: '%s'\n", token.message);
      token.turn = 0;
      strcpy(token.message, i);
      memcpy(shmPtr, &token, sizeof(memToken));
