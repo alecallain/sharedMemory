@@ -38,27 +38,31 @@ int main() {
   memToken token;
   int shmId;
   char *shmPtr;
-  printf("give me input\n");
-  fgets(token.message, sizeof(token.message), stdin);
-  token.turn = 0;
 
-    while(1){
+  token.turn = 0;
+  if ((shmId = shmget (key, sizeof(memToken), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
+     perror ("i can't get no..\n");
+     exit (1);
+  }
+  // get the pointer
+  if ((shmPtr = shmat (shmId, 0, 0)) == (void*) -1) {
+     perror ("can't attach\n");
+     exit (1);
+  }
+
+  while(strcmp(token.message, "quit") != 0){
+      printf("give me input\n");
+      fgets(token.message, sizeof(token.message), stdin);
      // set up a segment
-     if ((shmId = shmget (key, sizeof(memToken), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
-        perror ("i can't get no..\n");
-        exit (1);
+
+     while(token.turn != 1){
+        // writing
+        token.turn = 1;
+        memcpy(shmPtr, &token, sizeof(memToken));
      }
-     // get the pointer
-     if ((shmPtr = shmat (shmId, 0, 0)) == (void*) -1) {
-        perror ("can't attach\n");
-        exit (1);
-     }
-     memcpy(shmPtr, &token, sizeof(memToken));
-     memToken tok2;
-     memcpy(&tok2, shmPtr, sizeof(memToken));
+     memcpy(&token, shmPtr, sizeof(memToken));
 
      printf("STUFF%s\n", tok2.message);
-
 
    }
    // detach
