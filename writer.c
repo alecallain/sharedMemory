@@ -23,12 +23,11 @@
 char userInput;
 int shmId;
 char* shmPtr;
-struct shmid_ds buffer;
 typedef struct {
   int turn;
   char message[500];
 } memToken;
-
+void sigintHandler (int sigNum);
 /**
 * Main method
 */
@@ -37,9 +36,7 @@ int main() {
   key_t key = ftok("test.txt",65);
   printf("Key: %d\n",key);
   memToken token;
-  int shmId;
-  char *shmPtr;
-
+  signal(SIGINT, sigintHandler);
   token.turn = 0;
   if ((shmId = shmget (key, sizeof(SHM_SIZE), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
      perror ("i can't get no..\n");
@@ -74,16 +71,21 @@ int main() {
         printf("We just wrote %s to the memory segment.\n", token.message);
    }
 
-   // detach
-   if (shmdt (shmPtr) < 0) {
-      perror ("just can't let go\n");
-      exit (1);
-   }
-   // clean
-   if (shmctl (shmId, IPC_RMID, 0) < 0) {
-      perror ("can't deallocate\n");
-      exit(1);
-   }
+
 
    return 0;
+}
+void sigintHandler (int sigNum){
+  printf("Detaching and deleting");
+  // detach
+  if (shmdt (shmPtr) < 0) {
+     perror ("just can't let go\n");
+     exit (1);
+  }
+  // clean
+  if (shmctl (shmId, IPC_RMID, 0) < 0) {
+     perror ("can't deallocate\n");
+     exit(1);
+  }
+  exit(0);
 }
