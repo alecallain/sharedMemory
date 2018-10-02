@@ -24,17 +24,24 @@ char userInput;
 int shmId;
 char* shmPtr;
 struct shmid_ds buffer;
-struct memToken
+typedef struct {
+  int turn;
+  char message[500];
+} memToken;
 
 /**
 * Main method
 */
 int main() {
   key_t key = ftok("shmfile",65);
+  memToken token;
   int shmId;
-   char *shmPtr;
+  char *shmPtr;
+  token.message = "this";
+  token.turn = "0";
+  while(1){
    // set up a segment
-   if ((shmId = shmget (IPC_PRIVATE, SHM_SIZE, IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
+   if ((shmId = shmget (IPC_PRIVATE, sizeof(memToken), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
       perror ("i can't get no..\n");
       exit (1);
    }
@@ -43,9 +50,11 @@ int main() {
       perror ("can't attach\n");
       exit (1);
    }
-   
-   printf ("value a: %lu\t value b: %lu\n", (unsigned long) shmPtr, (unsigned long) shmPtr + SHM_SIZE);
+   memcpy(token, shmPrt);
 
+   printf ("value a: %lu\t value b: %lu\n", (unsigned long) shmPtr, (unsigned long) shmPtr + SHM_SIZE);
+   sleep(10);
+ }
    // detach
    if (shmdt (shmPtr) < 0) {
       perror ("just can't let go\n");
