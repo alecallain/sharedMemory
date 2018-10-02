@@ -67,7 +67,7 @@ int main() {
      // you change the turn variable so that it is the writers turn
      printf("Got the message: '%s'\n", token.message);
      token.turn = 0;
-     strcpy(token.message, i);
+     //strcpy(token.message, i);
      memcpy(shmPtr, &token, sizeof(memToken));
      //sleep(2);
 
