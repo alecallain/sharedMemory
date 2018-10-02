@@ -33,7 +33,7 @@ typedef struct {
 * Main method
 */
 int main() {
-  key_t key = ftok("shmfile",65);
+  key_t key = ftok("test.txt",65);
   printf("Key: %d",key);
   memToken token;
   int shmId;
