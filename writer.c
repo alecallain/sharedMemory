@@ -39,8 +39,8 @@ int main() {
   char *shmPtr;
   printf("give me input\n");
   fgets(token.message, sizeof(token.message), stdin);
-  token.turn = "0";
-  
+  token.turn = 0;
+
   while(1){
    // set up a segment
    if ((shmId = shmget (IPC_PRIVATE, sizeof(memToken), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
