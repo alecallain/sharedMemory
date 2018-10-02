@@ -34,6 +34,7 @@ typedef struct {
 */
 int main() {
   key_t key = ftok("shmfile",65);
+  printf("Key: %d",key);
   memToken token;
   int shmId;
   char *shmPtr;
@@ -41,24 +42,25 @@ int main() {
   fgets(token.message, sizeof(token.message), stdin);
   token.turn = 0;
 
-  while(1){
-   // set up a segment
-   if ((shmId = shmget (IPC_PRIVATE, sizeof(memToken), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
-      perror ("i can't get no..\n");
-      exit (1);
+    while(1){
+     // set up a segment
+     if ((shmId = shmget (key, sizeof(memToken), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
+        perror ("i can't get no..\n");
+        exit (1);
+     }
+     // get the pointer
+     if ((shmPtr = shmat (shmId, 0, 0)) == (void*) -1) {
+        perror ("can't attach\n");
+        exit (1);
+     }
+     memcpy(shmPtr, &token, sizeof(memToken));
+     memToken tok2;
+     memcpy(&tok2, shmPtr, sizeof(memToken));
+
+     printf("STUFF%s\n", tok2.message);
+
+
    }
-   // get the pointer
-   if ((shmPtr = shmat (shmId, 0, 0)) == (void*) -1) {
-      perror ("can't attach\n");
-      exit (1);
-   }
-   memcpy(shmPtr, &token, sizeof(memToken));
-   memToken tok2;
-   memcpy(&tok2, shmPtr, sizeof(memToken));
-   printf("STUFF%s\n", tok2.message);
-   printf ("value a: %lu\t value b: %lu\n", (unsigned long) shmPtr, (unsigned long) shmPtr + SHM_SIZE);
-   sleep(10);
- }
    // detach
    if (shmdt (shmPtr) < 0) {
       perror ("just can't let go\n");
