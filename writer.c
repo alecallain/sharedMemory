@@ -78,7 +78,7 @@ int main() {
    return 0;
 }
 void sigintHandler (int sigNum){
-  printf("Detaching and deleting");
+  printf("Detaching and deleting.\n");
   // detach
   if (shmdt (shmPtr) < 0) {
      perror ("just can't let go\n");
