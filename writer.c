@@ -24,27 +24,34 @@ char userInput;
 int shmId;
 char* shmPtr;
 struct shmid_ds buffer;
+struct memToken
 
 /**
 * Main method
 */
 int main() {
+  key_t key = ftok("shmfile",65);
   int shmId;
    char *shmPtr;
-
+   // set up a segment
    if ((shmId = shmget (IPC_PRIVATE, SHM_SIZE, IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
       perror ("i can't get no..\n");
       exit (1);
    }
+   // get the pointer
    if ((shmPtr = shmat (shmId, 0, 0)) == (void*) -1) {
       perror ("can't attach\n");
       exit (1);
    }
+   strcpy(shmPrt, "BITCH\0");
    printf ("value a: %lu\t value b: %lu\n", (unsigned long) shmPtr, (unsigned long) shmPtr + SHM_SIZE);
+
+   // detach
    if (shmdt (shmPtr) < 0) {
       perror ("just can't let go\n");
       exit (1);
    }
+   // clean
    if (shmctl (shmId, IPC_RMID, 0) < 0) {
       perror ("can't deallocate\n");
       exit(1);
