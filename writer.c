@@ -32,6 +32,7 @@ typedef struct {
 /**
 * Main method
 */
+// writers trun is when its zero
 int main() {
   key_t key = ftok("test.txt",65);
   printf("Key: %d\n",key);
@@ -60,6 +61,9 @@ int main() {
         token.turn = 1;
         memcpy(shmPtr, &token, sizeof(memToken));
      }
+     // check for updates on turn so the writer can go again
+     // if token . turn is updated to 0 by teh reader
+     // we know that the reader read and we can write again
      memcpy(&token, shmPtr, sizeof(memToken));
 
      printf("STUFF%s\n", token.message);

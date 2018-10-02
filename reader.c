@@ -33,14 +33,15 @@ typedef struct {
 /**
 * Main method
 */
+// the reader gets to read when the turn is when its 1
 int main() {
   key_t key = ftok("test.txt",65);
   printf("Key: %d\n",key);
   memToken token;
   int shmId;
   char *shmPtr;
+  token.turn = 1;
 
-  token.turn = 0;
   if ((shmId = shmget (key, sizeof(memToken), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
      perror ("i can't get no..\n");
      exit (1);
@@ -56,9 +57,11 @@ int main() {
       fgets(token.message, sizeof(token.message), stdin);
      // set up a segment
 
-     while(token.turn != 1){
+     while(token.turn != 0){
         // writing
-        token.turn = 1;
+        token.turn = 0;
+        char i = "32";
+        strcpy(token.message, "");
         memcpy(shmPtr, &token, sizeof(memToken));
      }
      memcpy(&token, shmPtr, sizeof(memToken));
