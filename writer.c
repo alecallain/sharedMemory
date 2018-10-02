@@ -53,7 +53,9 @@ int main() {
       exit (1);
    }
    memcpy(shmPtr, &token, sizeof(memToken));
-
+   memToken tok2;
+   memcpy(&tok2, shmPtr, sizeof(memToken));
+   printf("STUFF%s\n", tok2.message);
    printf ("value a: %lu\t value b: %lu\n", (unsigned long) shmPtr, (unsigned long) shmPtr + SHM_SIZE);
    sleep(10);
  }
