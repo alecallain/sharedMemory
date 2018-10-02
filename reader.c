@@ -59,7 +59,7 @@ int main() {
      while(token.turn == 0){
        // it is not the readers turn to change the tun var
        // reading for updates on the turn variable
-       printf("Cheking for updates.\n");
+       // printf("Cheking for updates.\n");
        memcpy(&token, shmPtr, sizeof(memToken));
      }
      // This is the critical section where you read for real
@@ -68,6 +68,7 @@ int main() {
      token.turn = 0;
      strcpy(token.message, i);
      memcpy(shmPtr, &token, sizeof(memToken));
+     sleep(2);
 
    }
    // detach
