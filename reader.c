@@ -60,8 +60,8 @@ int main() {
      while(token.turn != 0){
         // writing
         token.turn = 0;
-        char i = "32";
-        strcpy(token.message, "");
+        char* i = "";
+        strcpy(token.message, i);
         memcpy(shmPtr, &token, sizeof(memToken));
      }
      memcpy(&token, shmPtr, sizeof(memToken));
