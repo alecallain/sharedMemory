@@ -40,8 +40,9 @@ int main() {
   memToken token;
   int shmId;
   char *shmPtr;
-  token.turn = 1;
-
+  char *i = "";
+  token.turn = 0;
+  strcpy(token.message, i);
   if ((shmId = shmget (key, sizeof(memToken), IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
      perror ("i can't get no..\n");
      exit (1);
@@ -53,20 +54,17 @@ int main() {
   }
 
   while(strcmp(token.message, "quit") != 0){
-      printf("give me input\n");
-      fgets(token.message, sizeof(token.message), stdin);
-     // set up a segment
-
-     while(token.turn != 0){
-        // writing
-        token.turn = 0;
-        char* i = "";
-        strcpy(token.message, i);
-        memcpy(shmPtr, &token, sizeof(memToken));
+     while(token.turn == 0){
+       // it is not the readers turn to change the tun var
+       // reading for updates on the turn variable
+       memcpy(&token, shmPtr, sizeof(memToken));
      }
-     memcpy(&token, shmPtr, sizeof(memToken));
-
-     printf("STUFF%s\n", token.message);
+     // This is the critical section where you read for real
+     // you change the turn variable so that it is the writers turn
+     printf("Got the message: %s");
+     token.turn = 0;
+     strcpy(token.message, i);
+     memcpy(shmPtr, &token, sizeof(memToken));
 
    }
    // detach
