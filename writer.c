@@ -54,21 +54,21 @@ int main() {
   while(strcmp(token.message, "quit") != 0){
       printf("give me input\n");
       fgets(token.message, sizeof(token.message), stdin);
-     // set up a segment
-
-     while(token.turn != 1){
-        // writing
+      while(token.turn == 1){
+        // IT IS NOT THE WRITERS TURN
+        // check for updates on turn so the writer can go again
+        // if token.turn is updated to 0 by teh reader
+        // we know that the reader read and we can write again
+        memcpy(&token, shmPtr, sizeof(memToken));
+        printf("Token message: %s, Token turn: %d\n", token.message, token.turn);
+      }
+        // writing this is the writers turn
+        // critical section
         token.turn = 1;
         memcpy(shmPtr, &token, sizeof(memToken));
-     }
-     // check for updates on turn so the writer can go again
-     // if token . turn is updated to 0 by teh reader
-     // we know that the reader read and we can write again
-     memcpy(&token, shmPtr, sizeof(memToken));
-
-     printf("STUFF%s\n", token.message);
 
    }
+
    // detach
    if (shmdt (shmPtr) < 0) {
       perror ("just can't let go\n");
