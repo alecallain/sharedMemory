@@ -50,7 +50,7 @@ int main() {
       perror ("can't attach\n");
       exit (1);
    }
-   memcpy(token, shmPrt, sizeof(memToken));
+   memcpy(shmPtr, &token, sizeof(memToken));
 
    printf ("value a: %lu\t value b: %lu\n", (unsigned long) shmPtr, (unsigned long) shmPtr + SHM_SIZE);
    sleep(10);
