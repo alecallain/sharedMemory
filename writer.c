@@ -62,7 +62,7 @@ int main() {
      }
      memcpy(&token, shmPtr, sizeof(memToken));
 
-     printf("STUFF%s\n", tok2.message);
+     printf("STUFF%s\n", token.message);
 
    }
    // detach
