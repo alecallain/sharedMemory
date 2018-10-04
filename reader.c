@@ -60,42 +60,29 @@ int main() {
        // it is not the readers turn to change the tun var
        // reading for updates on the turn variable
        // printf("Checking for updates.\n");
-       //printf("Token message: '%s', Token turn: %d\n", token.message, token.turn);
        memcpy(&token, shmPtr, sizeof(memToken));
      }
      // This is the critical section where you read for real
      // you change the turn variable so that it is the writers turn
      printf("Got the message: '%s'\n", token.message);
      token.turn = 0;
-     //strcpy(token.message, i);
      memcpy(shmPtr, &token, sizeof(memToken));
-     //sleep(2);
-
-   }
-   // detach
-   if (shmdt (shmPtr) < 0) {
-      perror ("just can't let go\n");
-      exit (1);
-   }
-   // clean
-   if (shmctl (shmId, IPC_RMID, 0) < 0) {
-      perror ("can't deallocate\n");
-      exit(1);
    }
    kill(getppid(), SIGINT);
    return 0;
 }
-
+// detach and clean the shared memeory place
+// this should be shut down secondarily though so we should be good
 void sigintHandler (int sigNum){
   printf("Detaching and deleting");
   // detach
   if (shmdt (shmPtr) < 0) {
-     perror ("just can't let go\n");
+     //perror ("just can't let go\n");
      exit (1);
   }
   // clean
   if (shmctl (shmId, IPC_RMID, 0) < 0) {
-     perror ("can't deallocate\n");
+     //perror ("can't deallocate\n");
      exit(1);
   }
   exit(0);

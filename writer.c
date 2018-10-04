@@ -15,8 +15,8 @@
 #define SHM_SIZE 1024
 
 /**
-* This class is for practice with reading
-* and writing to shared memory
+* This class is for writing to shared
+* memory using the lock step method.
 *
 * @author Allison Bolen
 * @author Alec Allain
@@ -42,6 +42,7 @@ int main() {
   memToken token;
   signal(SIGINT, sigintHandler);
   token.turn = 0;
+
   if ((shmId = shmget (key, SHM_SIZE, IPC_CREAT|S_IRUSR|S_IWUSR)) < 0) {
      perror ("i can't get no..\n");
      exit (1);
