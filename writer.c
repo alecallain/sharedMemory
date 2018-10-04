@@ -77,16 +77,22 @@ int main() {
    kill(getpid(), SIGINT);
    return 0;
 }
+// detach and clean the shared memeory place
+// detach and clean the shared memeory place
+// this should be shut down first,  I did accidentally program in a "quit" functoinality so if a writer sends quit then the
+// readers will quit before the writer will and they will detach and clean the memeory space before the writer does. so i commented out teh perrors because the
+// memory does get detached but when we do it it wont work because its already been detached
+// though so we should be good.
 void sigintHandler (int sigNum){
   printf("Detaching and deleting.\n");
   // detach
   if (shmdt (shmPtr) < 0) {
-     perror ("just can't let go\n");
+     //perror ("just can't let go\n");
      exit (1);
   }
   // clean
   if (shmctl (shmId, IPC_RMID, 0) < 0) {
-     perror ("can't deallocate\n");
+     //perror ("can't deallocate\n");
      exit(1);
   }
   exit(0);
