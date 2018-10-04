@@ -72,7 +72,10 @@ int main() {
    return 0;
 }
 // detach and clean the shared memeory place
-// this should be shut down secondarily though so we should be good
+// this should be shut down second to the writer, so i commented out teh perrors because the
+// memory does get detached but when we do it it wont work because its already been detached
+// though so we should be good. I did accidentally program in a "quit" functoinality so if a writer send quit then the
+// readers will quit before the writer will
 void sigintHandler (int sigNum){
   printf("Detaching and deleting");
   // detach
