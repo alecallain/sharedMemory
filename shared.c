@@ -50,7 +50,7 @@ int main() {
         }
 
         // detatches memory segment
-        if (shmctl(shmId, IPC_RMID, 0) < 0) {
+        if (shmctl(shmId, IPC_RMID, &buffer) < 0) {
             fprintf(stderr, "Cannot deallocate memory");
             exit(1);
         }
